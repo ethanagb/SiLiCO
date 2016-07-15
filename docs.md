@@ -40,7 +40,7 @@ o, --output=<str>, OPT**			Output directory for results. Default = Current direc
 
 -p, --pacbio, OPT 			Generate PacBio data. Calculates a log normal distribution. Default mode if none specified.
 
-**[ DOCUMENTATION ] **
+**[ DOCUMENTATION ]**
 
 -h, --help				Display this message.
 

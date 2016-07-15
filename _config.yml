@@ -1,0 +1,46 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+source: source
+destination: _site
+sass:
+  sass_dir: _sass
+  style: expanded # compressed # expanded
+
+# permalink and highlighter
+permalink   : /:year/:title/
+markdown    : kramdown
+highlighter : pygments
+
+# SEO settings
+title: SiLiCO
+description: "a simulator of long read sequencing in pacbio and oxford nanopore"
+keywords: "bioinformatics, open source, python, genomics, in silico"
+
+# Site settings
+url: http://silico.ethanagbaker.com
+baseurl: ""
+# baseurl: ""
+
+# Author settings
+author:
+  name      : Ethan A. G. Baker
+  job       : 
+  bio       : 
+  thumb     : 
+  email     : ethanagbaker@gmail.com
+  url       : ethanagbaker.com
+  github    : ethanagbaker
+  twitter   : ethanagbaker
+  facebook  : 
+  linkedin  : 
+
+# google_analytics: UA-52446115-1
+repo: http://github.com/ethanagbaker/SiLiCO
+
+# comments
+disqus_shortname: "ethanagbaker"

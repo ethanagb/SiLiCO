@@ -7,8 +7,6 @@ permalink: /about/
 
 If you use SiLiCO in your research please cite it as follows: 
 
-[Citation Placeholder]:
-
 `Ethan Alexander Garcia Baker, Mendivil Ramos, O., McCombie, W.R., "SiLiCO:A Simulator for Long Read Sequencing in PacBio and Oxford Nanopore". bioRxiv 076901 doi:10.1101/076901. 23 Sep 2016.`
 
 SiLiCO is made freely available under the GNU GPL 3.0 license.

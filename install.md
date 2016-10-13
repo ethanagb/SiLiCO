@@ -7,7 +7,7 @@ permalink: /install/
 
 Requirements
 ---
-SiLiCO is compatible with Python 2.7.11 or higher and Python 3.5 or higher.
+SiLiCO is compatible with Python 2.7.11 or higher. Python 3.5 compatibility is a work in progress.
 
 SiLiCO requires the following dependencies, which are installed (or updated) during setup:
 

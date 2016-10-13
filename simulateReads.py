@@ -15,7 +15,7 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 	#Initialize variables
 	y=0
 	loopController=True
-	
+
 	#Open the index file (chrdist.td)
 	with open("SiLiCO_Scratch/chrdist.td",'r') as infile:
 		lengths = []
@@ -27,7 +27,7 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 			names.append(str(name))
 	infile.close()
 	lengthDict = dict(zip(names,lengths))
-	genomeLength=0 
+	genomeLength=0
 	names=natsorted(names) #A sorted list of chromosome names.
 
 	#Calculate the total genome length
@@ -36,7 +36,7 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 
 	chrCount = len(lengths)
 	thresholdDict={} #A dictionary of chromome thresholds (defined as end of a chromsome as determined by length from chrdist.td)
-	correctionDict={} #A correction to get the start of the chromosome. Important for generating bed file. 
+	correctionDict={} #A correction to get the start of the chromosome. Important for generating bed file.
 
 	#Generate the threshold dictionary.
 
@@ -45,7 +45,7 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 		name = str(names[chrom])#this name will go as key in dict
 		if name =="chr1":
 			thresholdDict[name]=lengthDict[name]
-			
+
 		else:
 			threshVal = 0
 			correctedVal = 0
@@ -54,7 +54,7 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 				name2 = "chr"+str(i)
 				threshVal += lengthDict[name2]
 				i += 1
-			correctedVal = threshVal - lengthDict[name2] 
+			correctedVal = threshVal - lengthDict[name2]
 			thresholdDict[name2] = threshVal
 
 	#Build correction dictionary
@@ -66,7 +66,7 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 			prevChromName = str(names[j-1])
 			correctionDict[chromName] = thresholdDict[prevChromName]
 
-	#Some calculations for the appropriate distribution. 
+	#Some calculations for the appropriate distribution.
 	print("Calculating distribution parameters...")
 
 	if seqMode == 1: #PacBio/LogNormal
@@ -83,7 +83,7 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 			readlengths=np.random.lognormal(mu,sigma,req_reads) #Read lengths are randomly determined from the calculated log-normal distribution.
 			read_pos=[]
 			name_counter = 0
-			
+
 			outfile = gzip.open(str(outfileName) + '/simulated_read_positions_trial_'+str(trial_counter) +'.bed.gz','wb')
 			for length in readlengths:
 				while True:
@@ -93,7 +93,7 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 					#print(str(y))
 					start_pos = int(y-buf)
 					end_pos = int(y+buf)
-					
+
 					#Figure out which chromosome this is in
 					selected_chrom = findChromosome(start_pos,names,thresholdDict)
 					end_pos_chrom = findChromosome(end_pos,names,thresholdDict)
@@ -101,7 +101,7 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 						outfile.write(str(selected_chrom) + '\t' + str(start_pos-correctionDict[str(selected_chrom)]) + '\t' + str(end_pos-correctionDict[str(selected_chrom)]) + '\t' + 'trial_'+str(trial_counter) +'_sim_read_' + str(name_counter) + '\n')
 						break
 
-				#count this run and reset reused variables. 
+				#count this run and reset reused variables.
 				name_counter+=1
 				x=None
 				y=None
@@ -111,12 +111,12 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 			outfile.close()
 			trial_counter+=1
 			print("Completed trial " + str(trial_counter) + " of " + str(trialCount) + ". ("+ str(100*(float(trial_counter)/trialCount)) + "%)")
-	
+
 	elif seqMode == 2: #nanopore/gamma
 		scale = float(std)/mean
 		shape = (mean**2)/float(std)
 		req_reads = int((int(desired_cov)*genomeLength)/float(mean))
-		
+
 		#Begin generating in-silico reads
 		trial_counter = 1
 		while trial_counter <= int(trialCount):
@@ -126,7 +126,7 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 			readlengths=np.random.gamma(shape,scale,req_reads) #Read lengths are randomly determined from the calculated log-normal distribution.
 			read_pos=[]
 			name_counter = 0
-			
+
 			outfile = gzip.open(str(outfileName) + '/simulated_read_positions_trial_'+str(trial_counter) +'.bed.gz','wb')
 			for length in readlengths:
 				while True:
@@ -135,7 +135,7 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 					y=getRandomPosition(buf,genomeLength,thresholdDict,names,lengthDict)
 					start_pos = int(y-buf)
 					end_pos = int(y+buf)
-					
+
 					#Figure out which chromosome this is in
 					selected_chrom = findChromosome(start_pos,names,thresholdDict)
 					end_pos_chrom = findChromosome(end_pos,names,thresholdDict)
@@ -143,7 +143,7 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 						outfile.write(str(selected_chrom) + '\t' + str(start_pos-correctionDict[str(selected_chrom)]) + '\t' + str(end_pos-correctionDict[str(selected_chrom)]) + '\t' + 'trial_'+str(trial_counter) +'_sim_read_' + str(name_counter) + '\n')
 						break
 
-				#count this run and reset reused variables. 
+				#count this run and reset reused variables.
 				name_counter+=1
 				x=None
 				y=None
@@ -153,8 +153,8 @@ def simulateReads(infileName,outfileName,mean,std,desired_cov,trialCount,names,s
 			outfile.close()
 			trial_counter+=1
 			print("Completed trial " + str(trial_counter) + " of " + str(trialCount) + ". ("+ str(100*(float(trial_counter)/trialCount)) + "%)")
-	
-	
+
+
 
 if __name__ == "__main__":
 	simulateReads(infileName,outfileName,mean,std,desired_cov,trials,names,seqMode)

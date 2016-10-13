@@ -17,6 +17,7 @@ def getRandomPosition(buf,genomeLength, thresholdDict,names,lengthDict):
             k = 1 #a counter to get the next chromosome threshold.
             if chrom == 'chr1':
                 t=0
+                r=thresholdDict[chrom]
             else:
                 t=thresholdDict[chrom]-lengthDict[chrom]
                 r=thresholdDict[chrom]
